@@ -41,28 +41,28 @@ struct FuncDecl: public Element {
 };
 
 struct FormalsList: public Element {  #TODO
-    Type type;
-    FormalsList(Type type);
+    Element element;
+    FormalsList(Element element);
 };
 
 struct FormalDecl: public Element {
-    Type type;
-    FormalDecl(Type type);
+    Element element;
+    FormalDecl(Element element);
 };
 
 struct Statements: public Element { #TODO
-    Type type;
-    Statements(Type type);
+    Element element;
+    Statements(Element element);
 };
 
 struct Statement: public Element {
-    Type type;
-    Statement(Type type);
+    Element element;
+    Statement(Element element);
 };
 
 struct Call: public Element { #TODO
-    Type type;
-    Call(Type type);
+    Element element;
+    Call(Element element);
 };
 
 struct ExpList: public Element { #TODO
@@ -72,14 +72,14 @@ struct ExpList: public Element { #TODO
 
 };
 
-struct TypeElement: public Element {
-    Type type;
-    TypeElement(Type type);
+struct Type: public Element {
+    Element element;
+    TypeElement(Element element);
 };
 
 struct Exp: public  Element {
-    Type type;
-    Exp(Type type);
+    Element element;
+    Exp(Element element);
 };
 
 %%
