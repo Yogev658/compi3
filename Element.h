@@ -7,19 +7,15 @@
 
 using namespace std;
 
-#define YYSTUPE Element*
-
+#define YYSTYPE Element*
 
 enum class TypeName {VOID, INT, BOOL, STRING, BYTE};
 
 class Element {
 public:
     TypeName typeName;
-    bool is_func;
     bool is_auto;  //TODO needed?
-    vector<TypeName> args;
-    TypeName returnArg;
-    Element(TypeName name, bool is_func, bool is_auto, vector<Element> *args, Element returnArg);
+    Element(TypeName name, bool is_func, bool is_auto, vector<Element> args, TypeName returnArg);
     // template <Element T> T* to();
 };
 
@@ -33,57 +29,55 @@ public:
 // };
 
 struct Identifier: public  Element {
-    string IdName;
+    string name;
     Element* type;
     int offset;
-    Identifier(string IdName, Element* type, int offset);
+    Identifier(string name, Element* type, int offset);
 };
 
 struct FuncDecl: public Element {
-    Element element;
-    FuncDecl(Element element);
+    vector<TypeName> args;
+    TypeName returnArg;
+    FuncDecl(vector<TypeName> args, TypeName returnArg);
 };
 
-struct FormalsList: public Element {  #TODO
-    Element element;
-    FormalsList(Element element);
+struct RetType: public Element {
+    TypeName type;
+    RetType(TypeName type);
 };
 
-struct FormalDecl: public Element {
-    Element element;
-    FormalDecl(Element element);
-};
-
-struct Statements: public Element { #TODO
-    Element element;
-    Statements(Element element);
+struct FormalsList: public Element {
+    vector<pair<TypeName, name>> args;
+    FormalsList(vector<pair<TypeName, name>> args);
+    void addToFormalList(vector<pair<TypeName, name>> &args)
+    explicit void addToFormalList(<pair<TypeName, name>> arg)
 };
 
 struct Statement: public Element {
-    Element element;
-    Statement(Element element);
+    bool _return;
+    bool _continue;
+    bool _break;
+    TypeName returnArg;
+    Statement(bool _return=false, bool _continue=false, bool _break=false, TypeName returnArg);
 };
 
-struct Call: public Element { #TODO
-    Element element;
-    Call(Element element);
+struct Call: public Element {
+    TypeName type;
+    Call(TypeName type);
 };
 
 struct ExpList: public Element { #TODO
     vector<Exp*> expList;
-    ExpList();
-    void addExp(Exp* exp);
-
+    ExpList(vector<Exp*> expList);
+    void addExpToExpList(Exp* exp);
 };
 
 struct Type: public Element {
-    Element element;
-    TypeElement(Element element);
+    TypeName type;
+    TypeElement(TypeName type);
 };
 
 struct Exp: public  Element {
-    Element element;
-    Exp(Element element);
+    TypeName type;
+    Exp(TypeName type);
 };
-
-%%
