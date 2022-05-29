@@ -1,32 +1,36 @@
+#pragma once
+
 #include <string>
-#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+
+using namespace std;
 
 #define YYSTUPE Element*
 
-using std::string;
-using std::cout;
-using std::endl;
 
-enum TypeName {VOID, INT, BOOL, STRING, BYTE};
+enum class TypeName {VOID, INT, BOOL, STRING, BYTE};
 
 class Element {
 public:
     TypeName typeName;
     bool is_func;
-    bool is_auto;  #TODO needed?
-    vector<Element> *args;
-    Element returnArg;
+    bool is_auto;  //TODO needed?
+    vector<TypeName> args;
+    TypeName returnArg;
     Element(TypeName name, bool is_func, bool is_auto, vector<Element> *args, Element returnArg);
-    template <Element T> T* to();
+    // template <Element T> T* to();
 };
 
-template <Element T> T *Element::to() {
-    T* e = dynamic_cast<T*>(this);
-    if (e == nullptr) {
-       cout << "Wasn't able to cast from *" << typeid(this).name() << "to *" << typeid(T).name() <<endl; #TODO Change!
-    }
-    return e;
-};
+// template <Element T>
+//  T *Element::to() {
+//     T* e = dynamic_cast<T*>(this);
+//     if (e == nullptr) {
+//        cout << "Wasn't able to cast from *" << typeid(this).name() << "to *" << typeid(T).name() <<endl; #TODO Change!
+//     }
+//     return e;
+// };
 
 struct Identifier: public  Element {
     string IdName;
