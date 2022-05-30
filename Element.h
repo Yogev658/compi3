@@ -48,9 +48,9 @@ struct RetType: public Element {
 };
 
 struct FormalsList: public Element {
-    vector<pair<TypeName, name>> args;
-    FormalsList(vector<pair<TypeName, name>> args);
-    void addToFormalList(pair<TypeName, name> arg)
+    vector<pair<TypeName, string>> args;
+    FormalsList(vector<pair<TypeName, string>> args);
+    void addToFormalList(pair<TypeName, string> arg);
 };
 
 struct Statement: public Element {
@@ -58,7 +58,7 @@ struct Statement: public Element {
     bool _continue;
     bool _break;
     TypeName returnArg;
-    Statement(bool _return=false, bool _continue=false, bool _break=false, TypeName returnArg);
+    Statement( TypeName returnArg, bool _return=false, bool _continue=false, bool _break=false);
 };
 
 struct Call: public Element {
@@ -66,7 +66,7 @@ struct Call: public Element {
     Call(TypeName type);
 };
 
-struct ExpList: public Element { #TODO
+struct ExpList: public Element { //TODO
     vector<Exp*> expList;
     ExpList(vector<Exp*> expList);
     void addExpToExpList(Exp* exp);
