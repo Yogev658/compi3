@@ -2,7 +2,7 @@ Rules for types:
 
 1 - done
 2 - done
-3
+3 - done
 4
 5
 6
