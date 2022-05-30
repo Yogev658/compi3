@@ -11,25 +11,24 @@
 #include <assert.h>
 
 #include "hw3_output.hpp"
+#include "Element.h"
 
 using namespace std;
-class Identifier;
 
 struct Scope{
-    vector<Identifier*>* _elements;
+    vector<Identifier*> _elements;
     int _offset;
 
-    Scope(int offset);
+    Scope(const int offset);
     ~Scope();
 
     void insert(Identifier* id);
     Identifier* find(string idName);
     int size();
-
 };
 
 class SymbolTable {
-    stack<Scope&> _scopeStack;
+    stack<Scope> _scopeStack;
 
 public:
     SymbolTable(): _scopeStack(){}

@@ -6,6 +6,7 @@
 using namespace std;
 
 namespace output{
+    extern const std::string rules[];
     void endScope();
     void printID(const string& id, int offset, const string& type);
     /* Do not save the string returned from this function in a data structure
@@ -24,6 +25,9 @@ namespace output{
     void errorUnexpectedContinue(int lineno);
     void errorMainMissing();
     void errorByteTooLarge(int lineno, const string& value);
+    void printProductionRule(const int ruleno);
+    void errorLex(const int lineno);
+    void errorSyn(const int lineno);
 
 }
 

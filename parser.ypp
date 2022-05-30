@@ -1,6 +1,5 @@
 %{
 
- // #include "hw2_output.hpp"
 #include "hw3_output.hpp"
 #include "symbolTable.h"
 #include "Element.h"
@@ -9,14 +8,14 @@
 #include <stdlib.h>
 
 using namespace output;
-using namespace
+using namespace std;
 
 extern int yylex();
 extern int yylineno;
 
 void yyerror (const char*);
 
-symbolTable table;
+SymbolTable table;
 
 %}
 
@@ -79,9 +78,9 @@ Statements : Statement {printProductionRule(12); }
            | Statements Statement {printProductionRule(13); };
 
 Statement : LBRACE Statements RBRACE {printProductionRule(14); }
-          | Type ID SC {$$ = new Statement($1); }
-          | Type ID ASSIGN Exp SC {$$ = new Statement($1); }
-          | AUTO ID ASSIGN Exp SC {$$ = new Statement($4); }
+          | Type ID SC {$$ = new Statement($1->to<Type>()->type); }
+          | Type ID ASSIGN Exp SC {$$ = new Statement($1->to<Type>()->type); }
+          | AUTO ID ASSIGN Exp SC {$$ = new Statement($4->to<Exp>()->type); }
           | ID ASSIGN Exp SC {printProductionRule(18); }
           | Call SC {printProductionRule(19); }
           | RETURN SC {printProductionRule(20); }
@@ -92,26 +91,26 @@ Statement : LBRACE Statements RBRACE {printProductionRule(14); }
           | BREAK SC {printProductionRule(25); }
           | CONTINUE SC {printProductionRule(26); };
 
-Call : ID LPAREN ExpList RPAREN {$$ = new Call(ID); }
-     | ID LPAREN RPAREN {$$ = new Call(ID); };
+Call : ID LPAREN ExpList RPAREN {$$ = new Call($1->to<Identifier>()->type); }
+     | ID LPAREN RPAREN {$$ = new Call($1->to<Identifier>()->type); };
 
 ExpList : Exp {printProductionRule(29); }
      | Exp COMMA ExpList {printProductionRule(30); };
 
-Type : INT {$$ = new Type(INT);}
-    | BYTE {$$ = new Type(BYTE); }
-    | BOOL {$$ = new Type(BOOL); };
+Type : INT {$$ = new Type(TYPE_INT);}
+    | BYTE {$$ = new Type(TYPE_BYTE); }
+    | BOOL {$$ = new Type(TYPE_BOOL); };
 
 Exp : LPAREN Exp RPAREN {printProductionRule(34); }
     | Exp BINOP_ADD Exp {printProductionRule(35); }
     | Exp BINOP_MULT Exp {printProductionRule(35); }
     | ID {printProductionRule(36); }
     | Call {printProductionRule(37); }
-    | NUM {$$ = Exp(INT);}
-    | NUM B {$$ = Exp(INT);}
-    | STRING {$$ = Exp(STRING);}
-    | TRUE {$$ = Exp(BOOL);}
-    | FALSE  {$$ = Exp(BOOL);}
+    | NUM {$$ = new Exp(TYPE_INT);}
+    | NUM B {$$ = new Exp(TYPE_INT);}
+    | STRING {$$ = new Exp(TYPE_STRING);}
+    | TRUE {$$ = new Exp(TYPE_BOOL);}
+    | FALSE  {$$ = new Exp(TYPE_BOOL);}
     | NOT Exp {printProductionRule(43); }
     | Exp AND Exp {printProductionRule(44); }
     | Exp OR Exp {printProductionRule(45); }
