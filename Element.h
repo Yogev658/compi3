@@ -15,7 +15,8 @@ class Element {
 public:
     TypeName typeName;
     bool is_auto;  //TODO needed?
-    Element(TypeName name, bool is_func, bool is_auto, vector<Element> args, TypeName returnArg);
+    Element();
+    Element(TypeName name, bool is_auto);
     // template <Element T> T* to();
 };
 
@@ -49,8 +50,7 @@ struct RetType: public Element {
 struct FormalsList: public Element {
     vector<pair<TypeName, name>> args;
     FormalsList(vector<pair<TypeName, name>> args);
-    void addToFormalList(vector<pair<TypeName, name>> &args)
-    explicit void addToFormalList(<pair<TypeName, name>> arg)
+    void addToFormalList(pair<TypeName, name> arg)
 };
 
 struct Statement: public Element {
