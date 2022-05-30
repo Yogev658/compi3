@@ -27,7 +27,7 @@ FormalsList::addToFormalList(pair<TypeName, name>> &arg) {
     args.push_back(arg)
 }
 
-Statement::Statement(bool _return=false, bool _continue=false, bool _break=false, TypeName returnArg): _return(_return),
+Statement::Statement(TypeName returnArg, bool _return=false, bool _continue=false, bool _break=false ): _return(_return),
     _continue(_continue), _break(_break), returnArg(returnArg) {
 
 }
