@@ -16,7 +16,7 @@ extern int yylineno;
 
 void yyerror (const char*);
 
-symbolTable table = SymbolTable();
+symbolTable table;
 
 %}
 
@@ -57,10 +57,10 @@ symbolTable table = SymbolTable();
 
 %%
 
-Program : Funcs {printProductionRule(1); };
+Program : Funcs {;};
 
-Funcs : /* epsilon */ {printProductionRule(2); }
-      | FuncDecl Funcs {printProductionRule(3); };
+Funcs : /* epsilon */ {;}
+      | FuncDecl Funcs {;};
 
 FuncDecl : RetType ID LPAREN Formals RPAREN LBRACE Statements RBRACE {printProductionRule(4); };
 
@@ -92,14 +92,15 @@ Statement : LBRACE Statements RBRACE {printProductionRule(14); }
           | BREAK SC {printProductionRule(25); }
           | CONTINUE SC {printProductionRule(26); };
 
-Call : ID LPAREN ExpList RPAREN {printProductionRule(27); }
-     | ID LPAREN RPAREN {printProductionRule(28); };
+Call : ID LPAREN ExpList RPAREN {$$ = new Call(ID); }
+     | ID LPAREN RPAREN {$$ = new Call(ID); };
 
 ExpList : Exp {printProductionRule(29); }
      | Exp COMMA ExpList {printProductionRule(30); };
-Type : INT {printProductionRule(31); }
-    | BYTE {printProductionRule(32); }
-    | BOOL {printProductionRule(33); };
+
+Type : INT {$$ = new Type(INT);}
+    | BYTE {$$ = new Type(BYTE); }
+    | BOOL {$$ = new Type(BOOL); };
 
 Exp : LPAREN Exp RPAREN {printProductionRule(34); }
     | Exp BINOP_ADD Exp {printProductionRule(35); }
@@ -121,6 +122,7 @@ Exp : LPAREN Exp RPAREN {printProductionRule(34); }
 %%
 
 int main() {
+    table = SymbolTable();
     return yyparse();
 }
 
