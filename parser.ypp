@@ -79,9 +79,9 @@ Statements : Statement {printProductionRule(12); }
            | Statements Statement {printProductionRule(13); };
 
 Statement : LBRACE Statements RBRACE {printProductionRule(14); }
-          | Type ID SC {printProductionRule(15); }
-          | Type ID ASSIGN Exp SC {printProductionRule(16); }
-          | AUTO ID ASSIGN Exp SC {printProductionRule(17); }
+          | Type ID SC {$$ = new Statement($1); }
+          | Type ID ASSIGN Exp SC {$$ = new Statement($1); }
+          | AUTO ID ASSIGN Exp SC {$$ = new Statement($4); }
           | ID ASSIGN Exp SC {printProductionRule(18); }
           | Call SC {printProductionRule(19); }
           | RETURN SC {printProductionRule(20); }
@@ -109,7 +109,7 @@ Exp : LPAREN Exp RPAREN {printProductionRule(34); }
     | Call {printProductionRule(37); }
     | NUM {$$ = Exp(INT);}
     | NUM B {$$ = Exp(INT);}
-    | STRING {printProductionRule(40); }
+    | STRING {$$ = Exp(STRING);}
     | TRUE {$$ = Exp(BOOL);}
     | FALSE  {$$ = Exp(BOOL);}
     | NOT Exp {printProductionRule(43); }
