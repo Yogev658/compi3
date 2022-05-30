@@ -3,11 +3,11 @@
 Element::Element() {
 
 }
-Element::Element(TypeName name, bool is_auto): name(name), is_auto(is_auto) {
+Element::Element(TypeName name, bool is_auto): typeName(name), is_auto(is_auto) {
 
 }
 
-Identifier::Identifier(int name, Element *type, int offset): name(name), *type(type), offset(offset) {
+Identifier::Identifier(string name, Element *type, int offset): Element(name, false), name(name), type(type), offset(offset) {
 
 }
 
@@ -19,11 +19,11 @@ RetType::RetType(TypeName type): type(type) {
 
 }
 
-FormalsList::FormalsList(vector<pair<TypeName, name>> args): args(args) {
+FormalsList::FormalsList(vector<pair<TypeName, string>> args): args(args) {
 
 }
 
-FormalsList::addToFormalList(pair<TypeName, name>> &arg) {
+void FormalsList::addToFormalList(pair<TypeName, string> &arg) {
     args.push_back(arg)
 }
 
