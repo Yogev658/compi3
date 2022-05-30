@@ -109,7 +109,7 @@ Exp : LPAREN Exp RPAREN {printProductionRule(34); }
     | Call {printProductionRule(37); }
     | NUM {$$ = Exp(INT);}
     | NUM B {$$ = Exp(INT);}
-    | STRING {printProductionRule(40); }
+    | STRING {$$ = Exp(STRING);}
     | TRUE {$$ = Exp(BOOL);}
     | FALSE  {$$ = Exp(BOOL);}
     | NOT Exp {printProductionRule(43); }
