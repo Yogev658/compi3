@@ -7,6 +7,8 @@
 
 #include <stack>
 #include <vector>
+#include <iostream>
+#include <assert.h>
 
 #include "hw3_output.hpp"
 
@@ -22,23 +24,20 @@ struct Scope{
 
     void insert(Identifier* id);
     Identifier* find(string idName);
+    int size();
 
 };
 
-class symbolTable {
-    stack<Scope&> _scopesStack;
+class SymbolTable {
+    stack<Scope&> _scopeStack;
 
 public:
     SymbolTable(): _scopeStack(){}
     ~SymbolTable(){}
 
-void SymbolTable::pushScope(){
-    assert(_scopeStack.size() != 0);
-    int offset = _scopesStack->top()->offset + _scopesStack->top()->size();
-    this->_scopeStack(Scope(offset));
-}
-    void addScope();
 
+    void pushScope();
+    void popScope();
     void insert();
     Identifier* find();
     void removeScope();

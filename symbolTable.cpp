@@ -26,10 +26,18 @@ Identifier* Scope::find(string idName){
     return nullptr;
 }
 
+int Scope::size(){
+    return _elements->size();
+}
 
+void SymbolTable::pushScope(){
+    assert(_scopeStack.size() != 0);
+    int offset = _scopeStack.top()._offset + _scopeStack.top().size();
+    _scopeStack.push(Scope(offset));
+}
 
 void SymbolTable::popScope(){
-    _scopeStack->pop();
+    _scopeStack.pop();
 }
 
 void pushFunctionScope(){}

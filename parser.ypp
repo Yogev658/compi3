@@ -1,13 +1,22 @@
 %{
 
-#include "output.hpp"
+ // #include "hw2_output.hpp"
+#include "hw3_output.hpp"
+#include "symbolTable.h"
+#include "Element.h"
+
+#include <iostream>
+#include <stdlib.h>
 
 using namespace output;
+using namespace
 
 extern int yylex();
 extern int yylineno;
 
 void yyerror (const char*);
+
+symbolTable table = SymbolTable();
 
 %}
 

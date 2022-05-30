@@ -74,7 +74,7 @@ struct ExpList: public Element { #TODO
 
 struct Type: public Element {
     TypeName type;
-    TypeElement(TypeName type);
+    Type(TypeName type);
 };
 
 struct Exp: public  Element {
