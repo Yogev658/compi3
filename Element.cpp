@@ -40,7 +40,7 @@ ExpList::ExpList(vector<Exp*> expList): expList(){
 
 }
 
-ExpList::addExpToExpList(Exp* exp) {
+void ExpList::addExpToExpList(Exp* exp) {
     expList.push_back(exp);
 }
 
