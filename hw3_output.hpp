@@ -26,8 +26,7 @@ namespace output{
     void errorMainMissing();
     void errorByteTooLarge(int lineno, const string& value);
     void printProductionRule(const int ruleno);
-    void errorLex(const int lineno);
-    void errorSyn(const int lineno);
+
 
 }
 

@@ -12,42 +12,51 @@ using namespace std;
 
 enum TypeName {TYPE_VOID, TYPE_INT, TYPE_BOOL, TYPE_STRING, TYPE_BYTE};
 
-struct Element {
+class Element {
 public:
     TypeName typeName;
     // bool is_auto;  //TODO needed?
     Element();
+    virtual ~Element() = default;
     Element(TypeName name);
     template <typename T> T* to();
 };
 
 
 
-struct Identifier: public  Element {
+class Identifier: public  Element {
+    public:
+    
     string name;
     TypeName type;
     int offset;
     Identifier(string name, TypeName type, int offset);
 };
 
-struct FuncDecl: public Element {
+class FuncDecl: public Element {
+    public:
     vector<TypeName> args;
     TypeName returnArg;
     FuncDecl(vector<TypeName> args, TypeName returnArg);
 };
 
-struct RetType: public Element {
+class RetType: public Element {
+    public:
+    
     TypeName type;
     RetType(TypeName type);
 };
 
-struct FormalsList: public Element {
+class FormalsList: public Element {
+    public:
+    
     vector<pair<TypeName, string>> args;
     FormalsList(vector<pair<TypeName, string>> args);
     void addToFormalList(pair<TypeName, string>& arg);
 };
 
-struct Statement: public Element {
+class Statement: public Element {
+    public:
     bool _return;
     bool _continue;
     bool _break;
@@ -55,33 +64,39 @@ struct Statement: public Element {
     Statement(TypeName returnArg, bool ret=false, bool cont =false, bool brk=false);
 };
 
-struct Call: public Element {
+class Call: public Element {
+    public:
+
     TypeName type;
     Call(TypeName type);
 };
 
-struct Exp: public  Element {
+class Exp: public  Element {
+    public:
     TypeName type;
     Exp(TypeName type);
 };
 
 
-struct ExpList: public Element { //TODO
+class ExpList: public Element { //TODO
+    public:
     vector<Exp*> expList;
     ExpList(vector<Exp*> expList);
     void addExpToExpList(Exp* exp);
 };
 
-struct Type: public Element {
+class Type: public Element {
+    public:
     TypeName type;
     Type(TypeName type);
 };
 
-template <typename T> // TODO
-T* Element::to() {
-    T* e = dynamic_cast<T*>(this);
-    if (e == nullptr) {
-       cout << "Wasn't able to cast from *" << typeid(this).name() << "to *" << typeid(T).name() <<endl; // TODO: change!!!!
+template<typename T>
+T *Element::to() {
+    T* res = dynamic_cast<T*>(this);
+    if(res == nullptr){
+        cout << "bad cast" << endl; 
+        throw std::bad_cast();
     }
-    return e;
+    return res;
 }
