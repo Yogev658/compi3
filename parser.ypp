@@ -112,11 +112,11 @@ Exp : LPAREN Exp RPAREN {printProductionRule(34); }
     | TRUE {$$ = new Exp(TYPE_BOOL);}
     | FALSE  {$$ = new Exp(TYPE_BOOL);}
     | NOT Exp {$$ = new Exp($1->to<Exp>()->type);}
-    | Exp AND Exp {printProductionRule(44); }
-    | Exp OR Exp {printProductionRule(45); }
-    | Exp RELOP_EQ Exp {printProductionRule(46); }
-    | Exp RELOP_REL Exp {printProductionRule(46); }
-    | LPAREN Type RPAREN Exp {printProductionRule(47); };
+    | Exp AND Exp { /* assert they have the same type */ $$ = New Exp($1->to<Exp>()->type);}
+    | Exp OR Exp  { /* assert they have the same type */ $$ = New Exp($1->to<Exp>()->type);}
+    | Exp RELOP_EQ Exp  { /* assert they have the same type */ $$ = New Exp($1->to<Exp>()->type);}
+    | Exp RELOP_REL Exp { /* assert they have the same type */ $$ = New Exp($1->to<Exp>()->type);}
+    | LPAREN Type RPAREN Exp  { /* assert casting is legal */ $$ = New Exp($2->to<Exp>()->type);};
 
 %%
 
