@@ -3,6 +3,7 @@
 #include "hw3_output.hpp"
 #include "symbolTable.h"
 #include "Element.h"
+#include "assert.h"
 
 #include <iostream>
 #include <stdlib.h>

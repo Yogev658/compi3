@@ -1,5 +1,4 @@
 #include "asserts.h"
-#include "Element.h"
 
 bool assertBothNumeric(Element* e1, Element* e2) {
     return (e1->typeName == TypeName::TYPE_INT || e1->typeName == TypeName::TYPE_BYTE) && (e2->typeName == TypeName::TYPE_INT || e2->typeName == TypeName::TYPE_BYTE);
