@@ -63,60 +63,60 @@ Funcs : /* epsilon */ {;}
 
 FuncDecl : RetType ID LPAREN Formals RPAREN LBRACE {} Statements RBRACE ;
 
-RetType : Type {printProductionRule(5); }
-        | VOID {printProductionRule(6); };
+RetType : Type {}
+        | VOID {};
 
-Formals : /* epsilon */ {printProductionRule(7); }
-        | FormalsList {printProductionRule(8); };
+Formals : /* epsilon */ {}
+        | FormalsList {};
 
-FormalsList : FormalDecl {printProductionRule(9); }
-            | FormalDecl COMMA FormalsList {printProductionRule(10); };
+FormalsList : FormalDecl {}
+            | FormalDecl COMMA FormalsList {};
 
-FormalDecl : Type ID {printProductionRule(11); };
+FormalDecl : Type ID {};
 
-Statements : Statement {printProductionRule(12); }
-           | Statements Statement {printProductionRule(13); };
+Statements : Statement {}
+           | Statements Statement {};
 
-Statement : LBRACE Statements RBRACE {printProductionRule(14); }
-          | Type ID SC {$$ = new Statement($1->to<Type>()->type); }
-          | Type ID ASSIGN Exp SC {$$ = new Statement($1->to<Type>()->type); }
-          | AUTO ID ASSIGN Exp SC {$$ = new Statement($4->to<Exp>()->type); }
-          | ID ASSIGN Exp SC {printProductionRule(18); }
-          | Call SC {printProductionRule(19); }
-          | RETURN SC {printProductionRule(20); }
-          | RETURN Exp SC {printProductionRule(21); }
+Statement : LBRACE Statements RBRACE {}
+          | Type ID SC {assertVariableNotDefined(); $$ = new Statement($1->to<Type>()->type); } //TODO: YOGEV - assert with SCOPE
+          | Type ID ASSIGN Exp SC {assertVariableNotDefined(); assertAssignmentIsLegal($1, $4); $$ = new Statement($1->to<Type>()->type); } //TODO: YOGEV - assert with scope
+          | AUTO ID ASSIGN Exp SC {assertVariableNotDefined(); $$ = new Statement($4->to<Exp>()->type); } //TODO: assert with SCOPE
+          | ID ASSIGN Exp SC {assertAssigmentToID($1, $3);} //TODO: YOGEV add param of SCOPE to assert
+          | Call SC {}
+          | RETURN SC {assertReturnType(TypeName expected, $1->to<RetType>()->type); } //TODO: add current return from SCOPE
+          | RETURN Exp SC {assertReturnType(TypeName expected, $2->to<Exp>()->type); } //TODO: add current return from SCOPE
           | IF LPAREN Exp RPAREN Statement {printProductionRule(22); }
           | IF LPAREN Exp RPAREN Statement ELSE Statement {printProductionRule(23); }
           | WHILE LPAREN Exp RPAREN Statement {printProductionRule(24); }
           | BREAK SC {printProductionRule(25); }
           | CONTINUE SC {printProductionRule(26); };
 
-Call : ID LPAREN ExpList RPAREN {$$ = new Call($1->to<Identifier>()->type); }
-     | ID LPAREN RPAREN {$$ = new Call($1->to<Identifier>()->type); };
+Call : ID LPAREN ExpList RPAREN {$$ = new Call($1->to<Identifier>()->type); } //TODO: (?) should we save return type of current SCOPE?
+     | ID LPAREN RPAREN {$$ = new Call($1->to<Identifier>()->type); }; //TODO: (?) should we save return type of current SCOPE?
 
-ExpList : Exp {printProductionRule(29); }
-     | Exp COMMA ExpList {printProductionRule(30); };
+ExpList : Exp {}
+     | Exp COMMA ExpList {};
 
 Type : INT {$$ = new Type(TYPE_INT);}
     | BYTE {$$ = new Type(TYPE_BYTE); }
     | BOOL {$$ = new Type(TYPE_BOOL); };
 
-Exp : LPAREN Exp RPAREN {printProductionRule(34); }
-    | Exp BINOP_ADD Exp {printProductionRule(35); }
-    | Exp BINOP_MULT Exp {printProductionRule(35); }
-    | ID {printProductionRule(36); }
-    | Call {printProductionRule(37); }
+Exp : LPAREN Exp RPAREN {$$ = new Exp($2->to<Exp>()->type);}
+    | Exp BINOP_ADD Exp {assertBothNumeric($1, $3);}
+    | Exp BINOP_MULT Exp {assertBothNumeric($1, $3);}
+    | ID {assertVariableDefined($1);} //TODO: add param of SCOPE to assert
+    | Call {}
     | NUM {$$ = new Exp(TYPE_INT);}
     | NUM B {$$ = new Exp(TYPE_INT);}
     | STRING {$$ = new Exp(TYPE_STRING);}
     | TRUE {$$ = new Exp(TYPE_BOOL);}
     | FALSE  {$$ = new Exp(TYPE_BOOL);}
-    | NOT Exp {$$ = new Exp($1->to<Exp>()->type);}
-    | Exp AND Exp { /* assert they have the same type */ $$ = new Exp($1->to<Exp>()->type);}
-    | Exp OR Exp  { /* assert they have the same type */ $$ = new Exp($1->to<Exp>()->type);}
-    | Exp RELOP_EQ Exp  { /* assert they have the same type */ $$ = new Exp($1->to<Exp>()->type);}
-    | Exp RELOP_REL Exp { /* assert they have the same type */ $$ = new Exp($1->to<Exp>()->type);}
-    | LPAREN Type RPAREN Exp  { /* assert casting is legal */ $$ = new Exp($2->to<Exp>()->type);};
+    | NOT Exp {assertTypesMatch(TYPE_BOOL, $2->to<Exp>()->type); $$ = new Exp($1->to<Exp>()->type);}
+    | Exp AND Exp {assertTypesMatch($1->to<Exp>()->type, $3->to<Exp>()->type); $$ = new Exp($1->to<Exp>()->type);}
+    | Exp OR Exp  {assertTypesMatch($1->to<Exp>()->type, $3->to<Exp>()->type); $$ = new Exp($1->to<Exp>()->type);}
+    | Exp RELOP_EQ Exp  {assertTypesMatch($1->to<Exp>()->type, $3->to<Exp>()->type); $$ = new Exp($1->to<Exp>()->type);}
+    | Exp RELOP_REL Exp {assertTypesMatch($1->to<Exp>()->type, $3->to<Exp>()->type); $$ = new Exp($1->to<Exp>()->type);}
+    | LPAREN Type RPAREN Exp  {assertCastingIsLegal($2, $4); $$ = new Exp($2->to<Exp>()->type);};
 
 %%
 

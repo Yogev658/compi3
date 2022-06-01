@@ -34,7 +34,7 @@ bool assertTypesMatch(TypeName t1, TypeName t2) {
     return t1 == t2;
 }
 
-bool assertAssignmentIsLegal(Element* src, Element* dest) { //TODO: add for rule 8
+bool assertCastingIsLegal(Element* src, Element* dest) { //TODO: add for rule 8
     if (src->typeName == dest->typeName) {
         return true;
     }

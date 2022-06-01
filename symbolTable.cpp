@@ -10,7 +10,6 @@ Scope::Scope(vector<Identifier*>* args){
     _elements = args;
 }
 
-
 Scope::~Scope(){
     // TODO: delete elements inside vector (maybe);
     for (int i = 0; i < _elements->size(); i++){
