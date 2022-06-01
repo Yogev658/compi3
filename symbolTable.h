@@ -16,10 +16,11 @@
 using namespace std;
 
 struct Scope{
-    vector<Identifier*> _elements;
+    vector<Identifier*>* _elements;
     int _offset;
 
     Scope(const int offset);
+    Scope(vector<Identifier*>* args);
     ~Scope();
 
     void insert(Identifier* id);
@@ -29,9 +30,10 @@ struct Scope{
 
 class SymbolTable {
     stack<Scope> _scopeStack;
+    Scope * _currFunc;
 
 public:
-    SymbolTable(): _scopeStack(){}
+    SymbolTable(): _scopeStack(), _currFunc(nullptr){}
     ~SymbolTable(){}
 
 
@@ -39,10 +41,10 @@ public:
     void popScope();
     void insert();
     Identifier* find();
-    void removeScope();
+    // void removeScope();
 
-    void addFunctionScope();
-    void removeFunctionScope();
+    void pushFunctionScope(FormalsList* argsList);
+    void popFunctionScope();
 };
 
 

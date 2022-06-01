@@ -61,7 +61,7 @@ Program : Funcs {;};
 Funcs : /* epsilon */ {;}
       | FuncDecl Funcs {;};
 
-FuncDecl : RetType ID LPAREN Formals RPAREN LBRACE Statements RBRACE {printProductionRule(4); };
+FuncDecl : RetType ID LPAREN Formals RPAREN LBRACE {} Statements RBRACE ;
 
 RetType : Type {printProductionRule(5); }
         | VOID {printProductionRule(6); };
@@ -112,11 +112,11 @@ Exp : LPAREN Exp RPAREN {printProductionRule(34); }
     | TRUE {$$ = new Exp(TYPE_BOOL);}
     | FALSE  {$$ = new Exp(TYPE_BOOL);}
     | NOT Exp {$$ = new Exp($1->to<Exp>()->type);}
-    | Exp AND Exp { /* assert they have the same type */ $$ = New Exp($1->to<Exp>()->type);}
-    | Exp OR Exp  { /* assert they have the same type */ $$ = New Exp($1->to<Exp>()->type);}
-    | Exp RELOP_EQ Exp  { /* assert they have the same type */ $$ = New Exp($1->to<Exp>()->type);}
-    | Exp RELOP_REL Exp { /* assert they have the same type */ $$ = New Exp($1->to<Exp>()->type);}
-    | LPAREN Type RPAREN Exp  { /* assert casting is legal */ $$ = New Exp($2->to<Exp>()->type);};
+    | Exp AND Exp { /* assert they have the same type */ $$ = new Exp($1->to<Exp>()->type);}
+    | Exp OR Exp  { /* assert they have the same type */ $$ = new Exp($1->to<Exp>()->type);}
+    | Exp RELOP_EQ Exp  { /* assert they have the same type */ $$ = new Exp($1->to<Exp>()->type);}
+    | Exp RELOP_REL Exp { /* assert they have the same type */ $$ = new Exp($1->to<Exp>()->type);}
+    | LPAREN Type RPAREN Exp  { /* assert casting is legal */ $$ = new Exp($2->to<Exp>()->type);};
 
 %%
 

@@ -49,7 +49,6 @@ class RetType: public Element {
 
 class FormalsList: public Element {
     public:
-    
     vector<pair<TypeName, string>> args;
     FormalsList(vector<pair<TypeName, string>> args);
     void addToFormalList(pair<TypeName, string>& arg);
