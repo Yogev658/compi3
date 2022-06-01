@@ -23,10 +23,8 @@ public:
 };
 
 
-
 class Identifier: public  Element {
-    public:
-    
+public:
     string name;
     TypeName type;
     int offset;
@@ -34,28 +32,27 @@ class Identifier: public  Element {
 };
 
 class FuncDecl: public Element {
-    public:
+public:
     vector<TypeName> args;
     TypeName returnArg;
     FuncDecl(vector<TypeName> args, TypeName returnArg);
 };
 
 class RetType: public Element {
-    public:
-    
+public:
     TypeName type;
     RetType(TypeName type);
 };
 
 class FormalsList: public Element {
-    public:
+public:
     vector<pair<TypeName, string>> args;
     FormalsList(vector<pair<TypeName, string>> args);
     void addToFormalList(pair<TypeName, string>& arg);
 };
 
 class Statement: public Element {
-    public:
+public:
     bool _return;
     bool _continue;
     bool _break;
@@ -64,28 +61,26 @@ class Statement: public Element {
 };
 
 class Call: public Element {
-    public:
-
+public:
     TypeName type;
     Call(TypeName type);
 };
 
 class Exp: public  Element {
-    public:
+public:
     TypeName type;
     Exp(TypeName type);
 };
 
-
 class ExpList: public Element { //TODO
-    public:
+public:
     vector<Exp*> expList;
     ExpList(vector<Exp*> expList);
     void addExpToExpList(Exp* exp);
 };
 
 class Type: public Element {
-    public:
+public:
     TypeName type;
     Type(TypeName type);
 };
