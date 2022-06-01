@@ -1,15 +1,19 @@
-void assertVariableNotDefined();
-void assertVariableDefined();
-void assertTypeMatches();
-void assertAssignmentIsLegal(); //השמה
-void assertReturnType();
-void assertBothNumeric();
-void assertValidRelop(); //1, 2, retType
-void assertValidBoolean(); //1, 2 or 1, retType
-void assertValidBinop(); //1, 2, retType of larger rep range
-void assertInWhile();
+#include "Element.h"
+#include "hw3_output.hpp"
+#include "symbolTable.h"
 
+bool assertBothNumeric(Element* e1, Element* e2);
+bool assertValidRelop(Element* e1, Element* e2, Element* retType);
+bool assertValidBoolean(Element* e1, Element* e2, Element* retType);
+bool assertValidBinop(Element* e1, Element* e2, Element* retType);
+bool assertTypesMatch(TypeName t1, TypeName t2);
+bool assertAssignmentIsLegal(Element* src, Element* dest);
+bool assertReturnTypeForPrint(TypeName t1, TypeName retType);
+bool assertReturnTypeForPrint_i(TypeName t1, TypeName retType);
+bool assertReturnType(TypeName expected, TypeName given);
 
-
-
+//TODO: rules with stack
+bool assertVariableNotDefined();
+bool assertVariableDefined();
+bool assertInWhile();
 
