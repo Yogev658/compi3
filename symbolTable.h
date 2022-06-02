@@ -39,8 +39,8 @@ public:
 
     void pushScope();
     void popScope();
-    void insert();
-    Identifier* find();
+    void insert(Identifier* id);
+    Identifier* find(string name);
     // void removeScope();
 
     void pushFunctionScope(FormalsList* argsList);

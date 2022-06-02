@@ -545,14 +545,14 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int8 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
        0,    59,    59,    61,    62,    64,    64,    66,    67,    69,
-      70,    72,    73,    75,    77,    78,    80,    81,    82,    83,
-      84,    85,    86,    87,    88,    89,    90,    91,    92,    94,
-      95,    97,    98,   100,   101,   102,   104,   105,   106,   107,
-     108,   109,   110,   111,   112,   113,   114,   115,   116,   117,
-     118,   119
+      70,    72,    73,    78,    86,    87,    89,    90,    91,    92,
+      93,    94,    95,    96,    97,    98,    99,   100,   101,   103,
+     104,   106,   107,   109,   110,   111,   113,   114,   115,   116,
+     117,   118,   119,   120,   121,   122,   123,   124,   125,   126,
+     127,   128
 };
 #endif
 
@@ -1242,282 +1242,297 @@ yyreduce:
 
   case 5: /* $@1: %empty  */
 #line 64 "parser.ypp"
-                                                   {}
+                                                   {table.pushFunctionScope(yyvsp[-2]->to<FormalsList>()); }
 #line 1247 "parser.tab.cpp"
+    break;
+
+  case 6: /* FuncDecl: RetType ID LPAREN Formals RPAREN LBRACE $@1 Statements RBRACE  */
+#line 64 "parser.ypp"
+                                                                                                                        {table.popFunctionScope();}
+#line 1253 "parser.tab.cpp"
     break;
 
   case 7: /* RetType: Type  */
 #line 66 "parser.ypp"
                {printProductionRule(5); }
-#line 1253 "parser.tab.cpp"
+#line 1259 "parser.tab.cpp"
     break;
 
   case 8: /* RetType: VOID  */
 #line 67 "parser.ypp"
                {printProductionRule(6); }
-#line 1259 "parser.tab.cpp"
+#line 1265 "parser.tab.cpp"
     break;
 
   case 9: /* Formals: %empty  */
 #line 69 "parser.ypp"
-                        {printProductionRule(7); }
-#line 1265 "parser.tab.cpp"
+                        {yyval = nullptr;}
+#line 1271 "parser.tab.cpp"
     break;
 
   case 10: /* Formals: FormalsList  */
 #line 70 "parser.ypp"
-                      {printProductionRule(8); }
-#line 1271 "parser.tab.cpp"
+                      {yyval = yyvsp[0];}
+#line 1277 "parser.tab.cpp"
     break;
 
   case 11: /* FormalsList: FormalDecl  */
 #line 72 "parser.ypp"
-                         {printProductionRule(9); }
-#line 1277 "parser.tab.cpp"
+                         {yyval = yyvsp[0];}
+#line 1283 "parser.tab.cpp"
     break;
 
   case 12: /* FormalsList: FormalDecl COMMA FormalsList  */
 #line 73 "parser.ypp"
-                                           {printProductionRule(10); }
-#line 1283 "parser.tab.cpp"
+                                           {
+                pair<TypeName, string> newPair = (*(yyvsp[-2]->to<FormalsList>()->args))[0];
+                yyvsp[0]->to<FormalsList>()->addToFormalList(newPair);
+                yyval = yyvsp[0];}
+#line 1292 "parser.tab.cpp"
     break;
 
   case 13: /* FormalDecl: Type ID  */
-#line 75 "parser.ypp"
-                     {printProductionRule(11); }
-#line 1289 "parser.tab.cpp"
+#line 78 "parser.ypp"
+                     {
+    yyval = new FormalsList(new vector<pair<TypeName, string>>()); 
+    const TypeName type = yyvsp[-1]->to<Type>()->type;
+    const string name = string(yyvsp[0]->to<Identifier>()->name);
+    pair<TypeName, string> newPair = make_pair(type, name);
+    yyval->to<FormalsList>()->addToFormalList(newPair);
+    }
+#line 1304 "parser.tab.cpp"
     break;
 
   case 14: /* Statements: Statement  */
-#line 77 "parser.ypp"
+#line 86 "parser.ypp"
                        {printProductionRule(12); }
-#line 1295 "parser.tab.cpp"
+#line 1310 "parser.tab.cpp"
     break;
 
   case 15: /* Statements: Statements Statement  */
-#line 78 "parser.ypp"
+#line 87 "parser.ypp"
                                   {printProductionRule(13); }
-#line 1301 "parser.tab.cpp"
+#line 1316 "parser.tab.cpp"
     break;
 
   case 16: /* Statement: LBRACE Statements RBRACE  */
-#line 80 "parser.ypp"
+#line 89 "parser.ypp"
                                      {printProductionRule(14); }
-#line 1307 "parser.tab.cpp"
+#line 1322 "parser.tab.cpp"
     break;
 
   case 17: /* Statement: Type ID SC  */
-#line 81 "parser.ypp"
+#line 90 "parser.ypp"
                        {yyval = new Statement(yyvsp[-2]->to<Type>()->type); }
-#line 1313 "parser.tab.cpp"
+#line 1328 "parser.tab.cpp"
     break;
 
   case 18: /* Statement: Type ID ASSIGN Exp SC  */
-#line 82 "parser.ypp"
+#line 91 "parser.ypp"
                                   {yyval = new Statement(yyvsp[-4]->to<Type>()->type); }
-#line 1319 "parser.tab.cpp"
+#line 1334 "parser.tab.cpp"
     break;
 
   case 19: /* Statement: AUTO ID ASSIGN Exp SC  */
-#line 83 "parser.ypp"
+#line 92 "parser.ypp"
                                   {yyval = new Statement(yyvsp[-1]->to<Exp>()->type); }
-#line 1325 "parser.tab.cpp"
+#line 1340 "parser.tab.cpp"
     break;
 
   case 20: /* Statement: ID ASSIGN Exp SC  */
-#line 84 "parser.ypp"
+#line 93 "parser.ypp"
                              {printProductionRule(18); }
-#line 1331 "parser.tab.cpp"
+#line 1346 "parser.tab.cpp"
     break;
 
   case 21: /* Statement: Call SC  */
-#line 85 "parser.ypp"
+#line 94 "parser.ypp"
                     {printProductionRule(19); }
-#line 1337 "parser.tab.cpp"
+#line 1352 "parser.tab.cpp"
     break;
 
   case 22: /* Statement: RETURN SC  */
-#line 86 "parser.ypp"
+#line 95 "parser.ypp"
                       {printProductionRule(20); }
-#line 1343 "parser.tab.cpp"
+#line 1358 "parser.tab.cpp"
     break;
 
   case 23: /* Statement: RETURN Exp SC  */
-#line 87 "parser.ypp"
+#line 96 "parser.ypp"
                           {printProductionRule(21); }
-#line 1349 "parser.tab.cpp"
+#line 1364 "parser.tab.cpp"
     break;
 
   case 24: /* Statement: IF LPAREN Exp RPAREN Statement  */
-#line 88 "parser.ypp"
+#line 97 "parser.ypp"
                                            {printProductionRule(22); }
-#line 1355 "parser.tab.cpp"
+#line 1370 "parser.tab.cpp"
     break;
 
   case 25: /* Statement: IF LPAREN Exp RPAREN Statement ELSE Statement  */
-#line 89 "parser.ypp"
+#line 98 "parser.ypp"
                                                           {printProductionRule(23); }
-#line 1361 "parser.tab.cpp"
+#line 1376 "parser.tab.cpp"
     break;
 
   case 26: /* Statement: WHILE LPAREN Exp RPAREN Statement  */
-#line 90 "parser.ypp"
+#line 99 "parser.ypp"
                                               {printProductionRule(24); }
-#line 1367 "parser.tab.cpp"
+#line 1382 "parser.tab.cpp"
     break;
 
   case 27: /* Statement: BREAK SC  */
-#line 91 "parser.ypp"
+#line 100 "parser.ypp"
                      {printProductionRule(25); }
-#line 1373 "parser.tab.cpp"
+#line 1388 "parser.tab.cpp"
     break;
 
   case 28: /* Statement: CONTINUE SC  */
-#line 92 "parser.ypp"
+#line 101 "parser.ypp"
                         {printProductionRule(26); }
-#line 1379 "parser.tab.cpp"
+#line 1394 "parser.tab.cpp"
     break;
 
   case 29: /* Call: ID LPAREN ExpList RPAREN  */
-#line 94 "parser.ypp"
+#line 103 "parser.ypp"
                                 {yyval = new Call(yyvsp[-3]->to<Identifier>()->type); }
-#line 1385 "parser.tab.cpp"
+#line 1400 "parser.tab.cpp"
     break;
 
   case 30: /* Call: ID LPAREN RPAREN  */
-#line 95 "parser.ypp"
+#line 104 "parser.ypp"
                         {yyval = new Call(yyvsp[-2]->to<Identifier>()->type); }
-#line 1391 "parser.tab.cpp"
+#line 1406 "parser.tab.cpp"
     break;
 
   case 31: /* ExpList: Exp  */
-#line 97 "parser.ypp"
+#line 106 "parser.ypp"
               {printProductionRule(29); }
-#line 1397 "parser.tab.cpp"
+#line 1412 "parser.tab.cpp"
     break;
 
   case 32: /* ExpList: Exp COMMA ExpList  */
-#line 98 "parser.ypp"
+#line 107 "parser.ypp"
                          {printProductionRule(30); }
-#line 1403 "parser.tab.cpp"
+#line 1418 "parser.tab.cpp"
     break;
 
   case 33: /* Type: INT  */
-#line 100 "parser.ypp"
+#line 109 "parser.ypp"
            {yyval = new Type(TYPE_INT);}
-#line 1409 "parser.tab.cpp"
+#line 1424 "parser.tab.cpp"
     break;
 
   case 34: /* Type: BYTE  */
-#line 101 "parser.ypp"
+#line 110 "parser.ypp"
            {yyval = new Type(TYPE_BYTE); }
-#line 1415 "parser.tab.cpp"
+#line 1430 "parser.tab.cpp"
     break;
 
   case 35: /* Type: BOOL  */
-#line 102 "parser.ypp"
+#line 111 "parser.ypp"
            {yyval = new Type(TYPE_BOOL); }
-#line 1421 "parser.tab.cpp"
+#line 1436 "parser.tab.cpp"
     break;
 
   case 36: /* Exp: LPAREN Exp RPAREN  */
-#line 104 "parser.ypp"
+#line 113 "parser.ypp"
                         {printProductionRule(34); }
-#line 1427 "parser.tab.cpp"
+#line 1442 "parser.tab.cpp"
     break;
 
   case 37: /* Exp: Exp BINOP_ADD Exp  */
-#line 105 "parser.ypp"
+#line 114 "parser.ypp"
                         {printProductionRule(35); }
-#line 1433 "parser.tab.cpp"
+#line 1448 "parser.tab.cpp"
     break;
 
   case 38: /* Exp: Exp BINOP_MULT Exp  */
-#line 106 "parser.ypp"
+#line 115 "parser.ypp"
                          {printProductionRule(35); }
-#line 1439 "parser.tab.cpp"
+#line 1454 "parser.tab.cpp"
     break;
 
   case 39: /* Exp: ID  */
-#line 107 "parser.ypp"
+#line 116 "parser.ypp"
          {printProductionRule(36); }
-#line 1445 "parser.tab.cpp"
+#line 1460 "parser.tab.cpp"
     break;
 
   case 40: /* Exp: Call  */
-#line 108 "parser.ypp"
+#line 117 "parser.ypp"
            {printProductionRule(37); }
-#line 1451 "parser.tab.cpp"
+#line 1466 "parser.tab.cpp"
     break;
 
   case 41: /* Exp: NUM  */
-#line 109 "parser.ypp"
+#line 118 "parser.ypp"
           {yyval = new Exp(TYPE_INT);}
-#line 1457 "parser.tab.cpp"
+#line 1472 "parser.tab.cpp"
     break;
 
   case 42: /* Exp: NUM B  */
-#line 110 "parser.ypp"
+#line 119 "parser.ypp"
             {yyval = new Exp(TYPE_INT);}
-#line 1463 "parser.tab.cpp"
+#line 1478 "parser.tab.cpp"
     break;
 
   case 43: /* Exp: STRING  */
-#line 111 "parser.ypp"
+#line 120 "parser.ypp"
              {yyval = new Exp(TYPE_STRING);}
-#line 1469 "parser.tab.cpp"
+#line 1484 "parser.tab.cpp"
     break;
 
   case 44: /* Exp: TRUE  */
-#line 112 "parser.ypp"
+#line 121 "parser.ypp"
            {yyval = new Exp(TYPE_BOOL);}
-#line 1475 "parser.tab.cpp"
+#line 1490 "parser.tab.cpp"
     break;
 
   case 45: /* Exp: FALSE  */
-#line 113 "parser.ypp"
+#line 122 "parser.ypp"
              {yyval = new Exp(TYPE_BOOL);}
-#line 1481 "parser.tab.cpp"
+#line 1496 "parser.tab.cpp"
     break;
 
   case 46: /* Exp: NOT Exp  */
-#line 114 "parser.ypp"
+#line 123 "parser.ypp"
               {yyval = new Exp(yyvsp[-1]->to<Exp>()->type);}
-#line 1487 "parser.tab.cpp"
+#line 1502 "parser.tab.cpp"
     break;
 
   case 47: /* Exp: Exp AND Exp  */
-#line 115 "parser.ypp"
+#line 124 "parser.ypp"
                   { /* assert they have the same type */ yyval = new Exp(yyvsp[-2]->to<Exp>()->type);}
-#line 1493 "parser.tab.cpp"
+#line 1508 "parser.tab.cpp"
     break;
 
   case 48: /* Exp: Exp OR Exp  */
-#line 116 "parser.ypp"
+#line 125 "parser.ypp"
                   { /* assert they have the same type */ yyval = new Exp(yyvsp[-2]->to<Exp>()->type);}
-#line 1499 "parser.tab.cpp"
+#line 1514 "parser.tab.cpp"
     break;
 
   case 49: /* Exp: Exp RELOP_EQ Exp  */
-#line 117 "parser.ypp"
+#line 126 "parser.ypp"
                         { /* assert they have the same type */ yyval = new Exp(yyvsp[-2]->to<Exp>()->type);}
-#line 1505 "parser.tab.cpp"
+#line 1520 "parser.tab.cpp"
     break;
 
   case 50: /* Exp: Exp RELOP_REL Exp  */
-#line 118 "parser.ypp"
+#line 127 "parser.ypp"
                         { /* assert they have the same type */ yyval = new Exp(yyvsp[-2]->to<Exp>()->type);}
-#line 1511 "parser.tab.cpp"
+#line 1526 "parser.tab.cpp"
     break;
 
   case 51: /* Exp: LPAREN Type RPAREN Exp  */
-#line 119 "parser.ypp"
+#line 128 "parser.ypp"
                               { /* assert casting is legal */ yyval = new Exp(yyvsp[-2]->to<Exp>()->type);}
-#line 1517 "parser.tab.cpp"
+#line 1532 "parser.tab.cpp"
     break;
 
 
-#line 1521 "parser.tab.cpp"
+#line 1536 "parser.tab.cpp"
 
       default: break;
     }
@@ -1711,7 +1726,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 121 "parser.ypp"
+#line 130 "parser.ypp"
 
 
 int main() {

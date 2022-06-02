@@ -24,7 +24,7 @@ void Scope::insert(Identifier* id){
     _offset++;
 }
 
-Identifier* Scope::find(string idName){
+Identifier* Scope::find(string idName){ // TODO: disable shadowing
     for (int i = 0; i < _elements->size(); i++){
         // TODO: use identifier's structure to find its name;
         if ((*_elements)[i]->name == idName){
@@ -53,15 +53,17 @@ void SymbolTable::pushFunctionScope(FormalsList* argsList){
     assert(_scopeStack.size() == 0);
     int offset = -1;
     vector<Identifier*>* args = new vector<Identifier*>();
-    for (int i = 0; i < argsList->args.size(); i++){
-        TypeName currType = argsList->args[i].first;
-        string currName = argsList->args[i].second;
+    for (int i = 0; i < argsList->args->size(); i++){
+        pair<TypeName, string> currPair =  (*(argsList->args))[i];
+        TypeName currType = currPair.first;
+        string currName = currPair.second;
         args->push_back(new Identifier(currName, currType, offset));
         offset--;
     }
     Scope s = Scope(args); // TODO: add this constructor
     _scopeStack.push(s);
 }
+
 
 void SymbolTable::popFunctionScope(){
     assert(_scopeStack.size() == 1);

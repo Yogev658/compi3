@@ -1,3 +1,4 @@
+#pragma once
 #include "asserts.h"
 #include "Element.h"
 
@@ -57,9 +58,9 @@ bool assertReturnType(TypeName expected, TypeName given) {
 }
 
 //TODO: rules with stack
-bool assertVariableNotDefined();
-bool assertVariableDefined();
-bool assertInWhile();
+// bool assertVariableNotDefined();
+// bool assertVariableDefined();
+// bool assertInWhile();
 
 
 

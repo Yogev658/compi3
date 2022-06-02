@@ -61,18 +61,27 @@ Program : Funcs {;};
 Funcs : /* epsilon */ {;}
       | FuncDecl Funcs {;};
 
-FuncDecl : RetType ID LPAREN Formals RPAREN LBRACE {} Statements RBRACE ;
+FuncDecl : RetType ID LPAREN Formals RPAREN LBRACE {table.pushFunctionScope($4->to<FormalsList>()); } Statements RBRACE {table.popFunctionScope();};
 
-RetType : Type {printProductionRule(5); }
-        | VOID {printProductionRule(6); };
+RetType : Type {$$ = new Type($1->to<Type>()->type);}
+        | VOID {$# = new Type(TYPE_VOID); };
 
-Formals : /* epsilon */ {printProductionRule(7); }
-        | FormalsList {printProductionRule(8); };
+Formals : /* epsilon */ {$$ = nullptr;}
+        | FormalsList {$$ = $1;};
 
-FormalsList : FormalDecl {printProductionRule(9); }
-            | FormalDecl COMMA FormalsList {printProductionRule(10); };
+FormalsList : FormalDecl {$$ = $1;}
+            | FormalDecl COMMA FormalsList {
+                pair<TypeName, string> newPair = (*($1->to<FormalsList>()->args))[0];
+                $3->to<FormalsList>()->addToFormalList(newPair);
+                $$ = $3;};
 
-FormalDecl : Type ID {printProductionRule(11); };
+FormalDecl : Type ID {
+    $$ = new FormalsList(new vector<pair<TypeName, string>>()); 
+    const TypeName type = $1->to<Type>()->type;
+    const string name = string($2->to<Identifier>()->name);
+    pair<TypeName, string> newPair = make_pair(type, name);
+    $$->to<FormalsList>()->addToFormalList(newPair);
+    };
 
 Statements : Statement {printProductionRule(12); }
            | Statements Statement {printProductionRule(13); };

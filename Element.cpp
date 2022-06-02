@@ -17,12 +17,12 @@ FuncDecl::FuncDecl(vector<TypeName> _args, TypeName returnArg): args(), returnAr
 
 RetType::RetType(TypeName type): type(type) {}
 
-FormalsList::FormalsList(vector<pair<TypeName, string>> args): args(args) {
+FormalsList::FormalsList(vector<pair<TypeName, string>> *args) : args(args) {
 
 }
 
 void FormalsList::addToFormalList(pair<TypeName, string> &arg) {
-    args.push_back(arg);
+    args->push_back(arg);
 }
 
 Statement::Statement(TypeName returnArg, bool ret, bool cont, bool brk): _return(ret),
