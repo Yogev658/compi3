@@ -1,6 +1,5 @@
 #pragma once
 #include "asserts.h"
-#include "Element.h"
 
 bool assertBothNumeric(Element* e1, Element* e2) {
     return (e1->typeName == TypeName::TYPE_INT || e1->typeName == TypeName::TYPE_BYTE) && (e2->typeName == TypeName::TYPE_INT || e2->typeName == TypeName::TYPE_BYTE);
@@ -35,7 +34,7 @@ bool assertTypesMatch(TypeName t1, TypeName t2) {
     return t1 == t2;
 }
 
-bool assertAssignmentIsLegal(Element* src, Element* dest) { //TODO: add for rule 8
+bool assertCastingIsLegal(Element* src, Element* dest) { //TODO: add for rule 8
     if (src->typeName == dest->typeName) {
         return true;
     }
